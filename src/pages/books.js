@@ -22,9 +22,17 @@ export const getServerSideProps = async (context) => {
 
     const client = createApolloClient();
     try {
-        books = await client.query({
+        let response = await client.query({
             query: GET_BOOKS,
         });
+        if (
+            response &&
+            response.data &&
+            response.data.books &&
+            Array.isArray(response.data.books)
+        ) {
+            books = response.data.books;
+        }
     } catch (err) {
         console.error("fetch books error", err);
     }
