@@ -21,10 +21,6 @@ export const getServerSideProps = async (context) => {
     let books = [];
 
     const client = createApolloClient();
-    // const { data } = await client.query({
-    //     query: GET_BOOKS,
-    // });
-    // console.log("books data", data);
     try {
         books = await client.query({
             query: GET_BOOKS,
