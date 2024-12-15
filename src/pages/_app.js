@@ -5,19 +5,19 @@ import Link from "next/link";
 export default function App({ Component, pageProps }) {
     // return <Component {...pageProps} />;
     return (
-        <div class="flex h-screen bg-gray-100">
+        <div className="flex h-screen bg-gray-100">
             {/* Side Panel */}
-            <div class="w-64 bg-gray-800 text-white flex flex-col">
-                <div class="px-4 py-6">
-                    <h2 class="text-2xl font-bold">Carroll Library</h2>
+            <div className="w-64 bg-gray-800 text-white flex flex-col">
+                <div className="px-4 py-6">
+                    <h2 className="text-2xl font-bold">Carroll Library</h2>
                 </div>
-                <nav class="mt-4 flex-1">
+                <nav className="mt-4 flex-1">
                     <ul>
                         {/* Dashboard Menu */}
                         <li>
                             <Link
                                 href="/"
-                                class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
+                                className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
                             >
                                 Dashboard
                             </Link>
@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }) {
                         <li>
                             <Link
                                 href="/books"
-                                class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
+                                className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
                             >
                                 Books
                             </Link>
@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
                         <li>
                             <Link
                                 href="/authors"
-                                class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
+                                className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
                             >
                                 Authors
                             </Link>
@@ -45,7 +45,7 @@ export default function App({ Component, pageProps }) {
             </div>
 
             {/* Main Content */}
-            <div class="flex-1 text-black p-6">
+            <div className="flex-1 text-black p-6">
                 <Component {...pageProps} />
             </div>
         </div>

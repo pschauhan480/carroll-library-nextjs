@@ -1,9 +1,42 @@
-const BooksPage = () => {
-    const BooksComponent = (props) => {
-        return <h1>Books Page</h1>;
-    };
+import { gql } from "@apollo/client";
+import createApolloClient from "./apollo_client";
 
-    return <BooksComponent />;
+const GET_BOOKS = gql`
+    query Books {
+        books {
+            id
+            title
+            description
+            published_date
+        }
+    }
+`;
+
+const BooksComponent = (props) => {
+    console.log("books props", props);
+    return <h1>Books Page</h1>;
 };
 
-export default BooksPage;
+export const getServerSideProps = async (context) => {
+    let books = [];
+
+    const client = createApolloClient();
+    // const { data } = await client.query({
+    //     query: GET_BOOKS,
+    // });
+    // console.log("books data", data);
+    try {
+        books = await client.query({
+            query: GET_BOOKS,
+        });
+    } catch (err) {
+        console.error("fetch books error", err);
+    }
+    return {
+        props: {
+            books,
+        },
+    };
+};
+
+export default BooksComponent;
