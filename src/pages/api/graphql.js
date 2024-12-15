@@ -48,14 +48,14 @@ const allowCors = (fn) => async (req, res) => {
 const connectPGDB = (fn) => async (req, res) => {
     const pgURL = `postgres://${pgDbUser}:${pgDbPassword}@${pgDbHost}:${pgDbPort}/${pgDbName}`;
 
-    await InitPGConnection(pgURL, dbSyncForce);
+    InitPGConnection(pgURL, dbSyncForce);
     return await fn(req, res);
 };
 
 const connectMongoDB = (fn) => async (req, res) => {
     const mongoURL = `mongodb://${mongoDbHost}:${mongoDbPort}/${mongoDbName}`;
 
-    await InitMongoConnection(mongoURL);
+    InitMongoConnection(mongoURL);
     return await fn(req, res);
 };
 

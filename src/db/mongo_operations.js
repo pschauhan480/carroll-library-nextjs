@@ -5,6 +5,9 @@ const { Schema } = mongoose;
 export let bookReviewsModel, auditLogModel;
 
 export function InitMongoConnection(mongoURL) {
+    if (mongoose.connection.readyState == 1) {
+        return;
+    }
     const bookReviewSchema = new Schema({
         bookID: String,
         review: String,
