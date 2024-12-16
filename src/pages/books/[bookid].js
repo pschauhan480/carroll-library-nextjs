@@ -72,7 +72,7 @@ const callGetBookReviews = async (bookid) => {
 const BookComponent = (props) => {
     // console.log("given props", props);
     const [book, setBook] = useState(props.book);
-    const [review, setReview] = useState({});
+    const [review, setReview] = useState({ rating: 1, review: "" });
 
     const [openDialog, setOpen] = useState(false);
     const [reviews, setReviews] = useState(props.reviews);
@@ -87,7 +87,7 @@ const BookComponent = (props) => {
     const saveReview = async (event) => {
         event.preventDefault();
         review.bookid = book.id;
-        console.log("review model", review);
+        // console.log("review model", review);
         await callSaveBookReview(review);
         setReview({});
         setOpen(false);
@@ -154,6 +154,8 @@ const BookComponent = (props) => {
                                     <input
                                         className="inline-flex h-[35px] w-full flex-1 items-center justify-center rounded px-2.5 text-[15px] leading-none text-violet11 shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
                                         id="rating"
+                                        min={1}
+                                        max={5}
                                         type="number"
                                         name="rating"
                                         value={review.rating}
