@@ -24,6 +24,11 @@ export const typeDefs = gql`
         review: String
     }
 
+    type DashboardSummary {
+        books: Int
+        authors: Int
+    }
+
     type Query {
         books(
             id: ID
@@ -33,6 +38,7 @@ export const typeDefs = gql`
             limit: Int
         ): [Book]
         authors(id: ID, name: String, page: Int, limit: Int): [Author]
+        dashboard: DashboardSummary
         bookreviews(bookid: ID!): [BookReview]
     }
 

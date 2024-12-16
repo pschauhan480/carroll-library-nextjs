@@ -33,6 +33,12 @@ export const resolvers = {
                 });
             }
         },
+        dashboard: async (_, req) => {
+            return {
+                books: Book.count(),
+                authors: Author.count(),
+            };
+        },
     },
     Mutation: {
         createBook: async (_, req) => {
