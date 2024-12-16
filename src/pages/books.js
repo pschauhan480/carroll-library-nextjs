@@ -22,6 +22,7 @@ const GET_BOOKS = gql`
             title
             description
             published_date
+            authorids
         }
     }
 `;
