@@ -57,7 +57,7 @@ const connectPGDB = (fn) => async (req, res) => {
 const connectMongoDB = (fn) => async (req, res) => {
     // const mongoURL = `mongodb://${mongoDbHost}:${mongoDbPort}/${mongoDbName}`;
     let mongoURL = "";
-    if (mongoProtocol && mongoProtocol == "") {
+    if (!mongoProtocol || mongoProtocol == "") {
         mongoURL += "mongodb://";
     } else {
         mongoURL += `${mongoProtocol}://`;
