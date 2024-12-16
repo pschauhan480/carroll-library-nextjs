@@ -19,6 +19,20 @@ export const resolvers = {
                 });
             }
         },
+        authors: async (_, req) => {
+            if (Author) {
+                return Author.findAll();
+            } else {
+                throw new GraphQLError("Author model is not initialized", {
+                    extensions: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        http: {
+                            status: 500,
+                        },
+                    },
+                });
+            }
+        },
     },
     Mutation: {
         createBook: async (_, req) => {
