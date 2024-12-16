@@ -14,6 +14,12 @@ export function InitPGConnection(pgURL, dbSyncForce) {
     if (sequelize == null || sequelize == undefined) {
         sequelize = new Sequelize(pgURL, {
             dialectModule: require("pg"),
+            dialectOptions: {
+                ssl: {
+                    require: true,
+                    rejectUnauthorized: false,
+                },
+            },
         });
 
         try {
