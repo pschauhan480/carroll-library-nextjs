@@ -87,6 +87,37 @@ export const resolvers = {
                 });
             }
         },
+        updateBook: async (_, req) => {
+            if (Book) {
+                console.log("update book request", req.book);
+                await Book.update(
+                    {
+                        title: req.book.title,
+                        description: req.book.description,
+                        published_date: req.book.published_date,
+                    },
+                    {
+                        where: {
+                            id: req.book.id,
+                        },
+                    }
+                );
+                // console.log(newBook instanceof Book);
+                // console.log(newBook.name);
+                return {
+                    message: "book updated successfully",
+                };
+            } else {
+                throw new GraphQLError("Book model is not initialized", {
+                    extensions: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        http: {
+                            status: 500,
+                        },
+                    },
+                });
+            }
+        },
         deleteBook: async (_, req) => {
             if (Book) {
                 console.log("delete book request", req.bookid);
