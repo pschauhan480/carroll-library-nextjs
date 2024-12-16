@@ -305,7 +305,7 @@ const AuthorsComponent = (props) => {
                                 {author.name}
                             </h3>
                             <p className="text-gray-600 text-start capitalize">
-                                {author.biography}
+                                {author.biography.substring(0, 75) + "..."}
                             </p>
                             {/* Action Buttons */}
                             <div className="mt-4 flex justify-end">

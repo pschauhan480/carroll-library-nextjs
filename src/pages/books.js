@@ -382,7 +382,7 @@ const BooksComponent = (props) => {
                                 {book.title}
                             </h3>
                             <p className="text-gray-600 text-start capitalize">
-                                {book.description}
+                                {book.description.substring(0, 75) + "..."}
                             </p>
                             {/* Action Buttons */}
                             <div className="mt-4 flex justify-end">
