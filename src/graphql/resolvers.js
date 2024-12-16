@@ -7,7 +7,20 @@ export const resolvers = {
     Query: {
         books: async (_, req) => {
             if (Book) {
-                return Book.findAll();
+                let where = {};
+                if (req.id !== null && req.id != undefined) {
+                    where.id = req.id;
+                }
+                if (req.title !== null && req.title != undefined) {
+                    where.title = req.title;
+                }
+                if (Object.keys(where).length > 0) {
+                    return Book.findAll({
+                        where: where,
+                    });
+                } else {
+                    return Book.findAll();
+                }
             } else {
                 throw new GraphQLError("Book model is not initialized", {
                     extensions: {
@@ -21,7 +34,21 @@ export const resolvers = {
         },
         authors: async (_, req) => {
             if (Author) {
-                return Author.findAll();
+                let where = {};
+                if (req.id !== null && req.id != undefined) {
+                    where.id = req.id;
+                }
+                if (req.name !== null && req.name != undefined) {
+                    where.name = req.name;
+                }
+                if (Object.keys(where).length > 0) {
+                    return Author.findAll({
+                        where: where,
+                    });
+                } else {
+                    console.log("response id", req);
+                    return Author.findAll();
+                }
             } else {
                 throw new GraphQLError("Author model is not initialized", {
                     extensions: {
