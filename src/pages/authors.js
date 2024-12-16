@@ -286,8 +286,8 @@ const AuthorsComponent = (props) => {
                 </div>
             </Dialog.Root>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {authors && authors.length > 0 ? (
-                    authors.map((author) => (
+                {currentData && currentData.length > 0 ? (
+                    currentData.map((author) => (
                         <div
                             key={author.id}
                             className="bg-white shadow-md rounded-lg p-4 border border-gray-200"
@@ -387,7 +387,7 @@ export const getServerSideProps = async (context) => {
     return {
         props: {
             authors,
-            itemsPerPage: 10,
+            itemsPerPage: 20,
         },
     };
 };
