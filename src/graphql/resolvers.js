@@ -3,6 +3,8 @@ import { GraphQLScalarType, Kind } from "graphql";
 
 import { Book, Author } from "@/db/pg_operations.js";
 
+import { BookReviewsModel } from "@/db/mongo_operations";
+
 export const resolvers = {
     Query: {
         books: async (_, req) => {
@@ -67,16 +69,44 @@ export const resolvers = {
             }
         },
         dashboard: async (_, req) => {
-            return {
-                books: Book.count(),
-                authors: Author.count(),
-            };
+            if (Author && Book) {
+                return {
+                    books: Book.count(),
+                    authors: Author.count(),
+                };
+            } else {
+                throw new GraphQLError(
+                    "Author or Book model is not initialized",
+                    {
+                        extensions: {
+                            code: "INTERNAL_SERVER_ERROR",
+                            http: {
+                                status: 500,
+                            },
+                        },
+                    }
+                );
+            }
+        },
+        bookreviews: async (_, req) => {
+            if (BookReviewsModel) {
+                return BookReviewsModel.find({ bookid: req.bookid });
+            } else {
+                throw new GraphQLError("Book review model is not initialized", {
+                    extensions: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        http: {
+                            status: 500,
+                        },
+                    },
+                });
+            }
         },
     },
     Mutation: {
         createBook: async (_, req) => {
             if (Book && Author) {
-                console.log("create book request", req.book);
+                // console.log("create book request", req.book);
                 let author;
                 if (
                     req.book.authorid != null &&
@@ -118,6 +148,23 @@ export const resolvers = {
                         },
                     },
                 });
+            }
+        },
+        createReview: async (_, req) => {
+            // console.log("book reviews model", req);
+            if (bookReviewsModel) {
+            } else {
+                throw new GraphQLError(
+                    "Book reviews model is not initialized",
+                    {
+                        extensions: {
+                            code: "INTERNAL_SERVER_ERROR",
+                            http: {
+                                status: 500,
+                            },
+                        },
+                    }
+                );
             }
         },
         updateBook: async (_, req) => {

@@ -1,12 +1,76 @@
+import gql from "graphql-tag";
 import { useState } from "react";
+import createApolloClient from "../apollo_client";
 
 import Link from "next/link";
 
 import { fetchBooks } from "../books";
 import * as Dialog from "@radix-ui/react-dialog";
 
+const CREATE_BOOK_REVIEW = gql`
+    mutation CreateReview($review: BookReviewInput) {
+        createReview(review: $review) {
+            id
+            bookid
+            rating
+            review
+        }
+    }
+`;
+
+const GET_BOOK_REVIEWS = gql`
+    query Bookreviews($bookid: ID!) {
+        bookreviews(bookid: $bookid) {
+            id
+            rating
+            review
+        }
+    }
+`;
+
+const callSaveBookReview = async (review) => {
+    const client = createApolloClient();
+    try {
+        await client.mutate({
+            mutation: CREATE_BOOK_REVIEW,
+            variables: {
+                review: review,
+            },
+        });
+        // console.log("save book review response", response);
+    } catch (err) {
+        console.error("failed to save book review", err);
+    }
+    return;
+};
+
+const callGetBookReviews = async (bookid) => {
+    let reviews = [];
+
+    const client = createApolloClient();
+    try {
+        let response = await client.query({
+            query: GET_BOOK_REVIEWS,
+            variables: {
+                bookid: bookid,
+            },
+        });
+        if (
+            response &&
+            response.data &&
+            response.data.bookreviews &&
+            Array.isArray(response.data.bookreviews)
+        ) {
+            reviews = response.data.bookreviews;
+        }
+    } catch (err) {
+        console.error("fetch book reviews error", err);
+    }
+    return reviews;
+};
+
 const BookComponent = (props) => {
-    // console.log("given props", props);
+    console.log("given props", props);
     const [book, setBook] = useState(props.book);
     const [review, setReview] = useState({});
 
@@ -20,7 +84,12 @@ const BookComponent = (props) => {
 
     const openCreateReview = () => {};
 
-    const saveReview = () => {};
+    const saveReview = async (event) => {
+        event.preventDefault();
+        await callSaveBookReview(review);
+        setReview({});
+        setOpen(false);
+    };
 
     return (
         <div className="p-6 max-w-lg mx-auto bg-white rounded shadow-md">
@@ -150,9 +219,11 @@ export const getServerSideProps = async (context) => {
     if (books.length > 0) {
         book = books[0];
     }
+    const reviews = await callGetBookReviews(bookid);
     return {
         props: {
             book: book,
+            reviews: reviews,
         },
     };
 };
