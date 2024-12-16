@@ -380,7 +380,7 @@ const AuthorsComponent = (props) => {
                     </button>
                 </div>
             ) : (
-                <p>No Books found</p>
+                ""
             )}
         </div>
     );

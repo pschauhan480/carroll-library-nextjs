@@ -458,7 +458,7 @@ const BooksComponent = (props) => {
                     </button>
                 </div>
             ) : (
-                <p>No Books found</p>
+                ""
             )}
         </div>
     );
