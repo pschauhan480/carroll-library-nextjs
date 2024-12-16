@@ -254,7 +254,7 @@ export const getServerSideProps = async (context) => {
     const books = await fetchBooks({
         id: bookid,
     });
-    console.log("fetch book by id", bookid, books);
+    // console.log("fetch book by id", bookid, books);
     let book = {};
     if (books.length > 0) {
         book = books[0];
