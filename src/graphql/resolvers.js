@@ -7,19 +7,24 @@ export const resolvers = {
     Query: {
         books: async (_, req) => {
             if (Book) {
+                let includeModel = null;
                 let where = {};
                 if (req.id !== null && req.id != undefined) {
                     where.id = req.id;
+                    includeModel = Author;
                 }
                 if (req.title !== null && req.title != undefined) {
                     where.title = req.title;
                 }
                 if (Object.keys(where).length > 0) {
-                    return Book.findAll({
+                    let response = await Book.findAll({
                         where: where,
+                        include: includeModel,
                     });
+                    console.log("books response", req, where, response);
+                    return response;
                 } else {
-                    return Book.findAll();
+                    return Book.findAll({});
                 }
             } else {
                 throw new GraphQLError("Book model is not initialized", {

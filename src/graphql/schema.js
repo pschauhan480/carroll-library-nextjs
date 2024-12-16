@@ -3,19 +3,19 @@ import gql from "graphql-tag";
 export const typeDefs = gql`
     scalar Date
 
-    type Book {
-        id: ID
-        title: String
-        description: String
-        published_date: Date
-        authorids: [ID]
-    }
-
     type Author {
         id: ID
         name: String
         biography: String
         born_date: Date
+    }
+
+    type Book {
+        id: ID
+        title: String
+        description: String
+        published_date: Date
+        Authors: [Author]
     }
 
     type BookReview {
