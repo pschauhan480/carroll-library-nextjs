@@ -20,7 +20,7 @@ const AuthorComponent = (props) => {
             </p>
             {author.born_date ? (
                 <p>
-                    <strong>Born Date:</strong> {author.born_date}
+                    <strong>Date of Birth:</strong> {author.born_date}
                 </p>
             ) : (
                 ""
