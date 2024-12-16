@@ -3,6 +3,14 @@ import createApolloClient from "./apollo_client";
 import Image from "next/image";
 import Link from "next/link";
 
+import classnames from "classnames";
+import * as Select from "@radix-ui/react-select";
+import {
+    CheckIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
+} from "@radix-ui/react-icons";
+
 import { useState } from "react";
 
 import * as Dialog from "@radix-ui/react-dialog";
@@ -25,6 +33,15 @@ const CREATE_BOOK = gql`
             title
             description
             published_date
+        }
+    }
+`;
+
+const GET_AUTHOR_NAMES = gql`
+    query Authors {
+        authors {
+            id
+            name
         }
     }
 `;
@@ -66,6 +83,28 @@ export const fetchBooks = async (whereObj) => {
         console.error("fetch books error", err);
     }
     return books;
+};
+
+export const fetchAuthorNames = async (whereObj) => {
+    let authors = [];
+
+    const client = createApolloClient();
+    try {
+        let response = await client.query({
+            query: GET_AUTHOR_NAMES,
+        });
+        if (
+            response &&
+            response.data &&
+            response.data.authors &&
+            Array.isArray(response.data.authors)
+        ) {
+            authors = response.data.authors;
+        }
+    } catch (err) {
+        console.error("fetch authors error", err);
+    }
+    return authors;
 };
 
 const callSaveBook = async (book) => {
@@ -125,6 +164,8 @@ const BooksComponent = (props) => {
     const [book, setBook] = useState({ title: "", description: "" });
     const [books, setBooks] = useState(props.books);
 
+    const [authors, setAuthors] = useState(props.authors);
+
     const [dialogMode, setDialogMode] = useState("create");
 
     const [openDialog, setOpen] = useState(false);
@@ -154,7 +195,9 @@ const BooksComponent = (props) => {
         // console.log("update book details", book);
     };
 
-    const openEditBook = (book) => {
+    const openEditBook = async (book) => {
+        let authors = await fetchAuthorNames();
+        setAuthors(authors);
         setDialogMode("edit");
         setBook(book);
         setOpen(true);
@@ -166,7 +209,9 @@ const BooksComponent = (props) => {
         setBooks(updateBooks);
     };
 
-    const openCreateBook = () => {
+    const openCreateBook = async () => {
+        let authors = await fetchAuthorNames();
+        setAuthors(authors);
         setDialogMode("create");
         setBook({});
         setOpen(true);
@@ -224,6 +269,38 @@ const BooksComponent = (props) => {
                                     value={book.description}
                                     onChange={handleChange}
                                 />
+                            </fieldset>
+                            <fieldset className="mb-[15px] flex items-center gap-5">
+                                <label
+                                    className="w-[90px] text-right text-[15px] text-violet11"
+                                    htmlFor="authorid"
+                                >
+                                    Authors
+                                </label>
+                                {authors ? (
+                                    <select
+                                        className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        id="authorid"
+                                        name="authorid"
+                                        value={book.authorid}
+                                        onChange={handleChange}
+                                        required
+                                    >
+                                        <option value="" disabled>
+                                            Select an author
+                                        </option>
+                                        {authors.map((author) => (
+                                            <option
+                                                key={author.id}
+                                                value={author.id}
+                                            >
+                                                {author.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    "failed to fetch authors"
+                                )}
                             </fieldset>
                             <div className="mt-[25px] flex justify-end">
                                 {dialogMode == "create" ? (

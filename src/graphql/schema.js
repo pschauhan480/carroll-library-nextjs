@@ -47,6 +47,7 @@ export const typeDefs = gql`
         title: String
         description: String
         published_date: Date
+        authorid: ID
     }
 
     input AuthorInput {

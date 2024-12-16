@@ -69,12 +69,39 @@ export const resolvers = {
     },
     Mutation: {
         createBook: async (_, req) => {
-            if (Book) {
+            if (Book && Author) {
                 console.log("create book request", req.book);
+                let author;
+                if (
+                    req.book.authorid != null &&
+                    req.book.authorid != undefined
+                ) {
+                    author = await Author.findByPk(req.book.authorid);
+                    if (!author) {
+                        throw new GraphQLError(
+                            "Author not found with the given id",
+                            {
+                                extensions: {
+                                    code: "BAD_REQUEST",
+                                    http: {
+                                        status: 400,
+                                    },
+                                },
+                            }
+                        );
+                    }
+                    delete req.book.authorid;
+                }
                 const newBook = Book.build(req.book);
+                await newBook.save();
+                if (author) {
+                    await newBook.addAuthor(author, {
+                        through: { selfGranted: false },
+                    });
+                    console.log("author added to the book");
+                }
                 // console.log(newBook instanceof Book);
                 // console.log(newBook.name);
-                await newBook.save();
                 return newBook;
             } else {
                 throw new GraphQLError("Book model is not initialized", {
