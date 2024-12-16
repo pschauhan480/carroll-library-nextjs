@@ -44,7 +44,7 @@ const BooksComponent = (props) => {
                             href={"/books/" + book.id}
                             className="bg-yellow-500 text-white  px-3 py-1 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         >
-                            View Details
+                            View
                         </Link>
                         <button className="bg-green-500 text-white px-3  py-1 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400">
                             Edit
