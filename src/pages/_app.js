@@ -22,15 +22,6 @@ export default function App({ Component, pageProps }) {
                                 Dashboard
                             </Link>
                         </li>
-                        {/* Books Menu */}
-                        <li>
-                            <Link
-                                href="/books"
-                                className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
-                            >
-                                Books
-                            </Link>
-                        </li>
                         {/* Authors Menu */}
                         <li>
                             <Link
@@ -38,6 +29,15 @@ export default function App({ Component, pageProps }) {
                                 className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
                             >
                                 Authors
+                            </Link>
+                        </li>
+                        {/* Books Menu */}
+                        <li>
+                            <Link
+                                href="/books"
+                                className="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded"
+                            >
+                                Books
                             </Link>
                         </li>
                     </ul>

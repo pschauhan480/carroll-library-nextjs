@@ -221,6 +221,31 @@ const BooksComponent = (props) => {
         setOpen(true);
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(books.length / props.itemsPerPage);
+
+    const currentData = books.slice(
+        (currentPage - 1) * props.itemsPerPage,
+        currentPage * props.itemsPerPage
+    );
+
+    const goToNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const goToPreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
+
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
     // console.log("books props", props);
     return (
         <div className="p-4">
@@ -338,8 +363,8 @@ const BooksComponent = (props) => {
                 </div>
             </Dialog.Root>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {books && books.length > 0 ? (
-                    books.map((book) => (
+                {currentData && currentData.length > 0 ? (
+                    currentData.map((book) => (
                         <div
                             key={book.id}
                             className="bg-white shadow-md rounded-lg p-4 border border-gray-200"
@@ -387,6 +412,50 @@ const BooksComponent = (props) => {
                     <p>No Books found</p>
                 )}
             </div>
+            <div className="flex justify-between items-center mt-6">
+                {/* Previous Button */}
+                <button
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded ${
+                        currentPage === 1
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                >
+                    Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex space-x-2">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => goToPage(index + 1)}
+                            className={`px-3 py-2 rounded ${
+                                currentPage === index + 1
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-gray-200 hover:bg-gray-300"
+                            }`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Next Button */}
+                <button
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded ${
+                        currentPage === totalPages
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
@@ -413,7 +482,8 @@ export const getServerSideProps = async (context) => {
     let books = await fetchBooks();
     return {
         props: {
-            books,
+            books: books,
+            itemsPerPage: 20,
         },
     };
 };
