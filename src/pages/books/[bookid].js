@@ -7,6 +7,9 @@ import { fetchBooks } from "../books";
 const BookComponent = (props) => {
     console.log("given props", props);
     const [book, setBook] = useState(props.book);
+
+    const [reviews, setReviews] = useState([]);
+
     return (
         <div className="p-6 max-w-lg mx-auto bg-white rounded shadow-md">
             <h1 className="text-2xl font-bold mb-4">Book Details</h1>
@@ -38,6 +41,21 @@ const BookComponent = (props) => {
             ) : (
                 ""
             )}
+            <div className="mt-6">
+                <h2 className="text-xl font-semibold mb-2">Reviews</h2>
+                <ul className="space-y-4">
+                    {reviews && Array.isArray(reviews) && reviews.length > 0
+                        ? reviews.map((review) => (
+                              <li
+                                  key={review.id}
+                                  className="p-4 bg-gray-100 rounded shadow-md"
+                              >
+                                  <p>{review.content}</p>
+                              </li>
+                          ))
+                        : "No reviews found"}
+                </ul>
+            </div>
         </div>
     );
 };
