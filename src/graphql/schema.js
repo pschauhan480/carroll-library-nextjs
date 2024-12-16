@@ -54,13 +54,17 @@ export const typeDefs = gql`
         born_date: Date
     }
 
+    type DeleteResponse {
+        message: String!
+    }
+
     type Mutation {
         createBook(book: BookInput!): Book
         updateBook(book: BookInput): Book
-        deleteBook(bookid: ID!): Book
+        deleteBook(bookid: ID!): DeleteResponse
 
         createAuthor(author: AuthorInput!): Author
         updateAuthor(author: AuthorInput): Author
-        deleteAuthor(authorid: ID!): Author
+        deleteAuthor(authorid: ID!): DeleteResponse
     }
 `;

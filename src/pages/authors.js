@@ -29,6 +29,14 @@ const CREATE_AUTHOR = gql`
     }
 `;
 
+const DELETE_AUTHOR = gql`
+    mutation DeleteAuthor($authorid: ID!) {
+        deleteAuthor(authorid: $authorid) {
+            message
+        }
+    }
+`;
+
 const fetchAuthors = async () => {
     let authors = [];
 
@@ -81,6 +89,24 @@ const AuthorsComponent = (props) => {
         let updateAuthors = await fetchAuthors();
         setAuthors(updateAuthors);
         // console.log("save author details", author);
+    };
+
+    const deleteAuthor = async (authorid) => {
+        const client = createApolloClient();
+        try {
+            await client.mutate({
+                mutation: DELETE_AUTHOR,
+                variables: {
+                    authorid: authorid,
+                },
+            });
+            setOpen(false);
+            // console.log("delete author response", response);
+        } catch (err) {
+            console.error("failed to delete author", err);
+        }
+        let updateAuthors = await fetchAuthors();
+        setAuthors(updateAuthors);
     };
 
     // console.log("authors props", props);
@@ -185,6 +211,7 @@ const AuthorsComponent = (props) => {
                                     Edit
                                 </button>
                                 <button
+                                    onClick={() => deleteAuthor(author.id)}
                                     className="bg-red-500 text-white px-3 py-1  rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
                                     // onClick={() => handleDelete(user.id)}
                                 >
