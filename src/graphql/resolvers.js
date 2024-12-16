@@ -60,6 +60,25 @@ export const resolvers = {
                 });
             }
         },
+        createAuthor: async (_, req) => {
+            if (Author) {
+                console.log("create author request", req.author);
+                const newAuthor = Author.build(req.author);
+                // console.log(newAuthor instanceof Author);
+                // console.log(newAuthor.name);
+                await newAuthor.save();
+                return newAuthor;
+            } else {
+                throw new GraphQLError("Author model is not initialized", {
+                    extensions: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        http: {
+                            status: 500,
+                        },
+                    },
+                });
+            }
+        },
     },
     Date: new GraphQLScalarType({
         name: "Date",
