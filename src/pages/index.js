@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import createApolloClient from "./apollo_client";
+import createApolloClient from "../_apollo_client";
 import Link from "next/link";
 
 const DASHBOARD_SUMMARY = gql`

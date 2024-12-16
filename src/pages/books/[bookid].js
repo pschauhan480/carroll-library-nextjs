@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import { useState } from "react";
-import createApolloClient from "../apollo_client";
+import createApolloClient from "../../_apollo_client";
 
 import Link from "next/link";
 
