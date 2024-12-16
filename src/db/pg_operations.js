@@ -39,7 +39,7 @@ export function InitPGConnection(pgURL, dbSyncForce) {
                     allowNull: false,
                 },
                 description: {
-                    type: DataTypes.STRING,
+                    type: DataTypes.TEXT,
                 },
                 published_date: {
                     type: DataTypes.TIME,
@@ -56,7 +56,7 @@ export function InitPGConnection(pgURL, dbSyncForce) {
                     allowNull: false,
                 },
                 biography: {
-                    type: DataTypes.STRING,
+                    type: DataTypes.TEXT,
                 },
                 born_date: {
                     type: DataTypes.DATE,
