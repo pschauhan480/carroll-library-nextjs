@@ -24,6 +24,16 @@ const BookComponent = (props) => {
             ) : (
                 ""
             )}
+            {book.Authors && book.Authors.length > 0 ? (
+                <p>
+                    <strong>Authors:</strong>
+                    {book.Authors.map((author) => (
+                        <span key={author.id}>{author.name}</span>
+                    ))}
+                </p>
+            ) : (
+                ""
+            )}
         </div>
     );
 };
