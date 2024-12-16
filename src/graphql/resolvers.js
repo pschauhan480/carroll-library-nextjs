@@ -90,6 +90,7 @@ export const resolvers = {
         },
         bookreviews: async (_, req) => {
             if (BookReviewsModel) {
+                console.log("book reviews model");
                 return BookReviewsModel.find({ bookid: req.bookid });
             } else {
                 throw new GraphQLError("Book review model is not initialized", {

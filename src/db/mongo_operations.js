@@ -1,12 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const { Schema } = mongoose;
 
 export let BookReviewsModel, AuditLogModel;
 
 export function InitMongoConnection(mongoURL) {
-    if (mongoose.connection.readyState == 1) {
+    if (
+        mongoose.connection.readyState == 1 ||
+        mongoose.connection.readyState == 2 ||
+        mongoose.connection.readyState == 3
+    ) {
         return;
+    } else {
+        console.log(
+            "mongoose connection state",
+            mongoose.connection.readyState
+        );
     }
     const bookReviewSchema = new Schema({
         bookid: String,

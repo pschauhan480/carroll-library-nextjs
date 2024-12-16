@@ -18,11 +18,13 @@ const pgDbPort = process.env.PG_DATABASE_PORT;
 
 const dbSyncForce = process.env.DATABASE_SYNC_FORCE;
 
-// const mongoDbUser = process.env.MONGO_DATABASE_USER;
+const mongoProtocol = process.env.MONGO_PROTOCOL;
+const mongoDbUser = process.env.MONGO_DATABASE_USER;
 const mongoDbName = process.env.MONGO_DATABASE_NAME;
-// const mongoDbPassword = process.env.MONGO_DATABASE_PASSWORD;
+const mongoDbPassword = process.env.MONGO_DATABASE_PASSWORD;
 const mongoDbHost = process.env.MONGO_DATABASE_HOST;
 const mongoDbPort = process.env.MONGO_DATABASE_PORT;
+const mongoDbQuery = process.env.MONGO_DATABASE_QUERY;
 
 const server = new ApolloServer({
     resolvers,
@@ -53,9 +55,40 @@ const connectPGDB = (fn) => async (req, res) => {
 };
 
 const connectMongoDB = (fn) => async (req, res) => {
-    const mongoURL = `mongodb://${mongoDbHost}:${mongoDbPort}/${mongoDbName}`;
+    // const mongoURL = `mongodb://${mongoDbHost}:${mongoDbPort}/${mongoDbName}`;
+    let mongoURL = "";
+    if (mongoProtocol && mongoProtocol == "") {
+        mongoURL += "mongodb://";
+    } else {
+        mongoURL += `${mongoProtocol}://`;
+    }
+    if (
+        mongoDbUser &&
+        mongoDbUser != "" &&
+        mongoDbPassword &&
+        mongoDbPassword != ""
+    ) {
+        mongoURL += `${mongoDbUser}:${mongoDbPassword}@`;
+    }
 
+    mongoURL += mongoDbHost;
+
+    if (mongoDbPort && mongoDbPort != "") {
+        mongoURL += `:${mongoDbPort}`;
+    }
+
+    mongoURL += "/";
+
+    if (mongoDbName && mongoDbName != "") {
+        mongoURL += mongoDbName + "/";
+    }
+
+    if (mongoDbQuery && mongoDbQuery != "") {
+        mongoURL += `?${mongoDbQuery}`;
+    }
+    console.log("created mongo db url", mongoURL);
     InitMongoConnection(mongoURL);
+
     return await fn(req, res);
 };
 
