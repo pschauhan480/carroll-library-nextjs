@@ -101,6 +101,37 @@ export const resolvers = {
                 });
             }
         },
+        updateAuthor: async (_, req) => {
+            if (Author) {
+                console.log("update author request", req.author);
+                await Author.update(
+                    {
+                        name: req.author.name,
+                        biography: req.author.biography,
+                        born_date: req.author.born_date,
+                    },
+                    {
+                        where: {
+                            id: req.author.id,
+                        },
+                    }
+                );
+                // console.log(newAuthor instanceof Author);
+                // console.log(newAuthor.name);
+                return {
+                    message: "author updated successfully",
+                };
+            } else {
+                throw new GraphQLError("Author model is not initialized", {
+                    extensions: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        http: {
+                            status: 500,
+                        },
+                    },
+                });
+            }
+        },
         deleteAuthor: async (_, req) => {
             if (Author) {
                 console.log("delete author request", req.authorid);

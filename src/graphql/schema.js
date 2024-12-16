@@ -43,14 +43,16 @@ export const typeDefs = gql`
     }
 
     input BookInput {
-        title: String!
-        description: String!
+        id: ID
+        title: String
+        description: String
         published_date: Date
     }
 
     input AuthorInput {
-        name: String!
-        biography: String!
+        id: ID
+        name: String
+        biography: String
         born_date: Date
     }
 
@@ -58,13 +60,17 @@ export const typeDefs = gql`
         message: String!
     }
 
+    type UpdateResponse {
+        message: String!
+    }
+
     type Mutation {
         createBook(book: BookInput!): Book
-        updateBook(book: BookInput): Book
+        updateBook(book: BookInput): UpdateResponse
         deleteBook(bookid: ID!): DeleteResponse
 
         createAuthor(author: AuthorInput!): Author
-        updateAuthor(author: AuthorInput): Author
+        updateAuthor(author: AuthorInput): UpdateResponse
         deleteAuthor(authorid: ID!): DeleteResponse
     }
 `;
