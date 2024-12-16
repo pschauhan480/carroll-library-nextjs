@@ -29,8 +29,33 @@ const CREATE_AUTHOR = gql`
     }
 `;
 
+const fetchAuthors = async () => {
+    let authors = [];
+
+    const client = createApolloClient();
+    try {
+        let response = await client.query({
+            query: GET_AUTHORS,
+        });
+        if (
+            response &&
+            response.data &&
+            response.data.authors &&
+            Array.isArray(response.data.authors)
+        ) {
+            authors = response.data.authors;
+        }
+    } catch (err) {
+        console.error("fetch authors error", err);
+    }
+    return authors;
+};
+
 const AuthorsComponent = (props) => {
     const [author, setAuthor] = useState({ name: "", biography: "" });
+    const [authors, setAuthors] = useState(props.authors);
+
+    const [openDialog, setOpen] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,23 +66,27 @@ const AuthorsComponent = (props) => {
         event.preventDefault();
         const client = createApolloClient();
         try {
-            let response = await client.mutate({
+            await client.mutate({
                 mutation: CREATE_AUTHOR,
                 variables: {
                     author: author,
                 },
             });
+            setAuthor({});
+            setOpen(false);
             // console.log("save author response", response);
         } catch (err) {
             console.error("failed to save author", err);
         }
+        let updateAuthors = await fetchAuthors();
+        setAuthors(updateAuthors);
         // console.log("save author details", author);
     };
 
     // console.log("authors props", props);
     return (
         <div className="p-4">
-            <Dialog.Root>
+            <Dialog.Root open={openDialog} onOpenChange={setOpen}>
                 <div className="mb-2 flex justify-end">
                     <Dialog.Trigger asChild>
                         <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -123,8 +152,8 @@ const AuthorsComponent = (props) => {
                 </div>
             </Dialog.Root>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {props.authors && props.authors.length > 0 ? (
-                    props.authors.map((author) => (
+                {authors && authors.length > 0 ? (
+                    authors.map((author) => (
                         <div
                             key={author.id}
                             className="bg-white shadow-md rounded-lg p-4 border border-gray-200"
@@ -173,24 +202,25 @@ const AuthorsComponent = (props) => {
 };
 
 export const getServerSideProps = async (context) => {
-    let authors = [];
+    // let authors = [];
 
-    const client = createApolloClient();
-    try {
-        let response = await client.query({
-            query: GET_AUTHORS,
-        });
-        if (
-            response &&
-            response.data &&
-            response.data.authors &&
-            Array.isArray(response.data.authors)
-        ) {
-            authors = response.data.authors;
-        }
-    } catch (err) {
-        console.error("fetch authors error", err);
-    }
+    // const client = createApolloClient();
+    // try {
+    //     let response = await client.query({
+    //         query: GET_AUTHORS,
+    //     });
+    //     if (
+    //         response &&
+    //         response.data &&
+    //         response.data.authors &&
+    //         Array.isArray(response.data.authors)
+    //     ) {
+    //         authors = response.data.authors;
+    //     }
+    // } catch (err) {
+    //     console.error("fetch authors error", err);
+    // }
+    let authors = await fetchAuthors();
     return {
         props: {
             authors,
