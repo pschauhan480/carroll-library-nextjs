@@ -43,14 +43,14 @@ export const typeDefs = gql`
     }
 
     input BookInput {
-        title: String
-        description: String
+        title: String!
+        description: String!
         published_date: Date
     }
 
     input AuthorInput {
-        name: String
-        biography: String
+        name: String!
+        biography: String!
         born_date: Date
     }
 

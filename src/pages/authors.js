@@ -18,6 +18,17 @@ const GET_AUTHORS = gql`
     }
 `;
 
+const CREATE_AUTHOR = gql`
+    mutation CreateAuthor($author: AuthorInput!) {
+        createAuthor(author: $author) {
+            id
+            name
+            biography
+            born_date
+        }
+    }
+`;
+
 const AuthorsComponent = (props) => {
     const [author, setAuthor] = useState({ name: "", biography: "" });
 
@@ -28,6 +39,18 @@ const AuthorsComponent = (props) => {
 
     const saveAuthor = async (event) => {
         event.preventDefault();
+        const client = createApolloClient();
+        try {
+            let response = await client.mutate({
+                mutation: CREATE_AUTHOR,
+                variables: {
+                    author: author,
+                },
+            });
+            console.log("save author response", response);
+        } catch (err) {
+            console.error("failed to save author", err);
+        }
         console.log("save author details", author);
     };
 

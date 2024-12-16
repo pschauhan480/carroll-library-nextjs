@@ -51,7 +51,6 @@ export const getServerSideProps = async (context) => {
     };
 
     const client = createApolloClient();
-    console.log("dashboard summary");
     try {
         let response = await client.query({
             query: DASHBOARD_SUMMARY,
