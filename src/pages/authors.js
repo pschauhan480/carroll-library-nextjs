@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import createApolloClient from "./apollo_client";
 import Image from "next/image";
 import Link from "next/link";
