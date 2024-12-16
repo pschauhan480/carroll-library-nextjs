@@ -8,6 +8,7 @@ export const typeDefs = gql`
         name: String
         biography: String
         born_date: Date
+        Books: [Book]
     }
 
     type Book {

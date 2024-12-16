@@ -14,6 +14,10 @@ const GET_AUTHORS = gql`
             name
             biography
             born_date
+            Books {
+                id
+                title
+            }
         }
     }
 `;
