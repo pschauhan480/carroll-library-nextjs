@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { fetchAuthors } from "../authors";
+import Link from "next/link";
 
 const AuthorComponent = (props) => {
     console.log("given props", props);
@@ -20,6 +21,18 @@ const AuthorComponent = (props) => {
             {author.born_date ? (
                 <p>
                     <strong>Born Date:</strong> {author.born_date}
+                </p>
+            ) : (
+                ""
+            )}
+            {author.Books && author.Books.length > 0 ? (
+                <p>
+                    <strong>Books:</strong>
+                    {author.Books.map((book) => (
+                        <Link href={"/books/" + book.id} key={book.id}>
+                            {book.title}
+                        </Link>
+                    ))}
                 </p>
             ) : (
                 ""

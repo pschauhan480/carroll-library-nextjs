@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import Link from "next/link";
+
 import { fetchBooks } from "../books";
 
 const BookComponent = (props) => {
@@ -28,7 +30,9 @@ const BookComponent = (props) => {
                 <p>
                     <strong>Authors:</strong>
                     {book.Authors.map((author) => (
-                        <span key={author.id}>{author.name}</span>
+                        <Link href={"/authors/" + author.id} key={author.id}>
+                            {author.name}
+                        </Link>
                     ))}
                 </p>
             ) : (
