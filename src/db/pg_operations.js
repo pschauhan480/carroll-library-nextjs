@@ -12,7 +12,9 @@ export let Book, Author;
 
 export function InitPGConnection(pgURL, dbSyncForce) {
     if (sequelize == null || sequelize == undefined) {
-        sequelize = new Sequelize(pgURL);
+        sequelize = new Sequelize(pgURL, {
+            dialectModule: require("pg"),
+        });
 
         try {
             sequelize.authenticate();
