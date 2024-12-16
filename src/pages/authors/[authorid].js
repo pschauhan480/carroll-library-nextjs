@@ -4,7 +4,7 @@ import { fetchAuthors } from "../authors";
 import Link from "next/link";
 
 const AuthorComponent = (props) => {
-    console.log("given props", props);
+    // console.log("given props", props);
     const [author, setAuthor] = useState(props.author);
     return (
         <div className="p-6 max-w-lg mx-auto bg-white rounded shadow-md">

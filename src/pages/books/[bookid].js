@@ -3,12 +3,24 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { fetchBooks } from "../books";
+import * as Dialog from "@radix-ui/react-dialog";
 
 const BookComponent = (props) => {
-    console.log("given props", props);
+    // console.log("given props", props);
     const [book, setBook] = useState(props.book);
+    const [review, setReview] = useState({});
 
+    const [openDialog, setOpen] = useState(false);
     const [reviews, setReviews] = useState([]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setReview({ ...review, [name]: value });
+    };
+
+    const openCreateReview = () => {};
+
+    const saveReview = () => {};
 
     return (
         <div className="p-6 max-w-lg mx-auto bg-white rounded shadow-md">
@@ -43,6 +55,74 @@ const BookComponent = (props) => {
             )}
             <div className="mt-6">
                 <h2 className="text-xl font-semibold mb-2">Reviews</h2>
+                <Dialog.Root open={openDialog} onOpenChange={setOpen}>
+                    <div className="mb-2 flex justify-end">
+                        <Dialog.Trigger asChild>
+                            <button
+                                onClick={openCreateReview}
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            >
+                                + Create
+                            </button>
+                        </Dialog.Trigger>
+                        <Dialog.Portal>
+                            <Dialog.Overlay className="fixed inset-0 bg-blackA6 data-[state=open]:animate-overlayShow" />
+                            <Dialog.Content className="fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
+                                <Dialog.Title className="m-0 text-[17px] font-medium text-mauve12">
+                                    Add New Review
+                                </Dialog.Title>
+                                <fieldset className="mb-[15px] flex items-center gap-5">
+                                    <label
+                                        className="w-[90px] text-right text-[15px] text-violet11"
+                                        htmlFor="name"
+                                    >
+                                        Rating
+                                    </label>
+                                    <input
+                                        className="inline-flex h-[35px] w-full flex-1 items-center justify-center rounded px-2.5 text-[15px] leading-none text-violet11 shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
+                                        id="name"
+                                        type="number"
+                                        name="name"
+                                        value={review.name}
+                                        onChange={handleChange}
+                                    />
+                                </fieldset>
+                                <fieldset className="mb-[15px] flex items-center gap-5">
+                                    <label
+                                        className="w-[90px] text-right text-[15px] text-violet11"
+                                        htmlFor="biography"
+                                    >
+                                        Review
+                                    </label>
+                                    <input
+                                        className="inline-flex h-[35px] w-full flex-1 items-center justify-center rounded px-2.5 text-[15px] leading-none text-violet11 shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
+                                        type="textarea"
+                                        id="biography"
+                                        name="biography"
+                                        value={review.biography}
+                                        onChange={handleChange}
+                                    />
+                                </fieldset>
+                                <div className="mt-[25px] flex justify-end">
+                                    <Dialog.Close asChild>
+                                        <button
+                                            onClick={saveReview}
+                                            className="bg-green-500 text-white px-3  py-1 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                        >
+                                            Save
+                                        </button>
+                                    </Dialog.Close>
+                                </div>
+                                <Dialog.Close asChild>
+                                    <button
+                                        className="absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-violet11 hover:bg-violet4 focus:shadow-[0_0_0_2px] focus:shadow-violet7 focus:outline-none"
+                                        aria-label="Close"
+                                    ></button>
+                                </Dialog.Close>
+                            </Dialog.Content>
+                        </Dialog.Portal>
+                    </div>
+                </Dialog.Root>
                 <ul className="space-y-4">
                     {reviews && Array.isArray(reviews) && reviews.length > 0
                         ? reviews.map((review) => (
