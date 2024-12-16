@@ -47,14 +47,14 @@ const AuthorsComponent = (props) => {
                     author: author,
                 },
             });
-            console.log("save author response", response);
+            // console.log("save author response", response);
         } catch (err) {
             console.error("failed to save author", err);
         }
-        console.log("save author details", author);
+        // console.log("save author details", author);
     };
 
-    console.log("authors props", props);
+    // console.log("authors props", props);
     return (
         <div className="p-4">
             <Dialog.Root>

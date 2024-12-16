@@ -60,6 +60,28 @@ export const resolvers = {
                 });
             }
         },
+        deleteBook: async (_, req) => {
+            if (Book) {
+                console.log("delete book request", req.bookid);
+                await Book.destroy({
+                    where: {
+                        id: req.bookid,
+                    },
+                });
+                return {
+                    message: "book deleted successfully",
+                };
+            } else {
+                throw new GraphQLError("Book model is not initialized", {
+                    extensions: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        http: {
+                            status: 500,
+                        },
+                    },
+                });
+            }
+        },
         createAuthor: async (_, req) => {
             if (Author) {
                 console.log("create author request", req.author);
@@ -68,6 +90,28 @@ export const resolvers = {
                 // console.log(newAuthor.name);
                 await newAuthor.save();
                 return newAuthor;
+            } else {
+                throw new GraphQLError("Author model is not initialized", {
+                    extensions: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        http: {
+                            status: 500,
+                        },
+                    },
+                });
+            }
+        },
+        deleteAuthor: async (_, req) => {
+            if (Author) {
+                console.log("delete author request", req.authorid);
+                await Author.destroy({
+                    where: {
+                        id: req.authorid,
+                    },
+                });
+                return {
+                    message: "author deleted successfully",
+                };
             } else {
                 throw new GraphQLError("Author model is not initialized", {
                     extensions: {
