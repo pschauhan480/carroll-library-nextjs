@@ -3,7 +3,7 @@ import { GraphQLScalarType, Kind } from "graphql";
 
 import { Book, Author } from "@/db/pg_operations.js";
 
-import { BookReviewsModel } from "@/db/mongo_operations";
+import { BookReviewsModel, InitMongoConnection } from "@/db/mongo_operations";
 
 export const resolvers = {
     Query: {
@@ -151,8 +151,11 @@ export const resolvers = {
             }
         },
         createReview: async (_, req) => {
-            // console.log("book reviews model", req);
-            if (bookReviewsModel) {
+            console.log("book reviews model", req);
+            if (BookReviewsModel) {
+                const review = new BookReviewsModel(req.review);
+                await review.save();
+                return review;
             } else {
                 throw new GraphQLError(
                     "Book reviews model is not initialized",

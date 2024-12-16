@@ -70,12 +70,12 @@ const callGetBookReviews = async (bookid) => {
 };
 
 const BookComponent = (props) => {
-    console.log("given props", props);
+    // console.log("given props", props);
     const [book, setBook] = useState(props.book);
     const [review, setReview] = useState({});
 
     const [openDialog, setOpen] = useState(false);
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState(props.reviews);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -86,9 +86,13 @@ const BookComponent = (props) => {
 
     const saveReview = async (event) => {
         event.preventDefault();
+        review.bookid = book.id;
+        console.log("review model", review);
         await callSaveBookReview(review);
         setReview({});
         setOpen(false);
+        let updateBooksReviews = await callGetBookReviews(book.id);
+        setReviews(updateBooksReviews);
     };
 
     return (
@@ -143,32 +147,32 @@ const BookComponent = (props) => {
                                 <fieldset className="mb-[15px] flex items-center gap-5">
                                     <label
                                         className="w-[90px] text-right text-[15px] text-violet11"
-                                        htmlFor="name"
+                                        htmlFor="rating"
                                     >
                                         Rating
                                     </label>
                                     <input
                                         className="inline-flex h-[35px] w-full flex-1 items-center justify-center rounded px-2.5 text-[15px] leading-none text-violet11 shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
-                                        id="name"
+                                        id="rating"
                                         type="number"
-                                        name="name"
-                                        value={review.name}
+                                        name="rating"
+                                        value={review.rating}
                                         onChange={handleChange}
                                     />
                                 </fieldset>
                                 <fieldset className="mb-[15px] flex items-center gap-5">
                                     <label
                                         className="w-[90px] text-right text-[15px] text-violet11"
-                                        htmlFor="biography"
+                                        htmlFor="review"
                                     >
                                         Review
                                     </label>
                                     <input
                                         className="inline-flex h-[35px] w-full flex-1 items-center justify-center rounded px-2.5 text-[15px] leading-none text-violet11 shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
-                                        type="textarea"
-                                        id="biography"
-                                        name="biography"
-                                        value={review.biography}
+                                        type="text"
+                                        id="review"
+                                        name="review"
+                                        value={review.review}
                                         onChange={handleChange}
                                     />
                                 </fieldset>
@@ -195,12 +199,46 @@ const BookComponent = (props) => {
                 <ul className="space-y-4">
                     {reviews && Array.isArray(reviews) && reviews.length > 0
                         ? reviews.map((review) => (
-                              <li
+                              <div
                                   key={review.id}
                                   className="p-4 bg-gray-100 rounded shadow-md"
                               >
-                                  <p>{review.content}</p>
-                              </li>
+                                  <div className="flex items-center mb-2">
+                                      <span className="text-lg font-semibold">
+                                          Rating:
+                                      </span>
+                                      <div className="flex ml-2">
+                                          {[...Array(5)].map((_, index) => (
+                                              <svg
+                                                  key={index}
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  fill={
+                                                      index < review.rating
+                                                          ? "gold"
+                                                          : "none"
+                                                  }
+                                                  viewBox="0 0 24 24"
+                                                  stroke="currentColor"
+                                                  className={`w-5 h-5 ${
+                                                      index < review.rating
+                                                          ? "text-yellow-400"
+                                                          : "text-gray-300"
+                                                  }`}
+                                              >
+                                                  <path
+                                                      strokeLinecap="round"
+                                                      strokeLinejoin="round"
+                                                      strokeWidth="2"
+                                                      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                                                  />
+                                              </svg>
+                                          ))}
+                                      </div>
+                                  </div>
+                                  <p className="text-gray-700">
+                                      {review.review}
+                                  </p>
+                              </div>
                           ))
                         : "No reviews found"}
                 </ul>
