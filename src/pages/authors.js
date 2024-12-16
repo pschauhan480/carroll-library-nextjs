@@ -176,6 +176,31 @@ const AuthorsComponent = (props) => {
         setOpen(true);
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(authors.length / props.itemsPerPage);
+
+    const currentData = authors.slice(
+        (currentPage - 1) * props.itemsPerPage,
+        currentPage * props.itemsPerPage
+    );
+
+    const goToNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const goToPreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
+
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
     // console.log("authors props", props);
     return (
         <div className="p-4">
@@ -299,7 +324,6 @@ const AuthorsComponent = (props) => {
                                 <button
                                     onClick={() => deleteAuthor(author.id)}
                                     className="bg-red-500 text-white px-3 py-1  rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
-                                    // onClick={() => handleDelete(user.id)}
                                 >
                                     Delete
                                 </button>
@@ -310,33 +334,60 @@ const AuthorsComponent = (props) => {
                     <p>No Authors found</p>
                 )}
             </div>
+            <div className="flex justify-between items-center mt-6">
+                {/* Previous Button */}
+                <button
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded ${
+                        currentPage === 1
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                >
+                    Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex space-x-2">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => goToPage(index + 1)}
+                            className={`px-3 py-2 rounded ${
+                                currentPage === index + 1
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-gray-200 hover:bg-gray-300"
+                            }`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Next Button */}
+                <button
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded ${
+                        currentPage === totalPages
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
 
 export const getServerSideProps = async (context) => {
-    // let authors = [];
-
-    // const client = createApolloClient();
-    // try {
-    //     let response = await client.query({
-    //         query: GET_AUTHORS,
-    //     });
-    //     if (
-    //         response &&
-    //         response.data &&
-    //         response.data.authors &&
-    //         Array.isArray(response.data.authors)
-    //     ) {
-    //         authors = response.data.authors;
-    //     }
-    // } catch (err) {
-    //     console.error("fetch authors error", err);
-    // }
     let authors = await fetchAuthors();
     return {
         props: {
             authors,
+            itemsPerPage: 10,
         },
     };
 };
