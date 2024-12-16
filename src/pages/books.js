@@ -412,50 +412,54 @@ const BooksComponent = (props) => {
                     <p>No Books found</p>
                 )}
             </div>
-            <div className="flex justify-between items-center mt-6">
-                {/* Previous Button */}
-                <button
-                    onClick={goToPreviousPage}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 rounded ${
-                        currentPage === 1
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
-                >
-                    Previous
-                </button>
+            {currentData && currentData.length > 0 ? (
+                <div className="flex justify-between items-center mt-6">
+                    {/* Previous Button */}
+                    <button
+                        onClick={goToPreviousPage}
+                        disabled={currentPage === 1}
+                        className={`px-4 py-2 rounded ${
+                            currentPage === 1
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-blue-500 text-white hover:bg-blue-600"
+                        }`}
+                    >
+                        Previous
+                    </button>
 
-                {/* Page Numbers */}
-                <div className="flex space-x-2">
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => goToPage(index + 1)}
-                            className={`px-3 py-2 rounded ${
-                                currentPage === index + 1
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-gray-200 hover:bg-gray-300"
-                            }`}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
+                    {/* Page Numbers */}
+                    <div className="flex space-x-2">
+                        {Array.from({ length: totalPages }, (_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => goToPage(index + 1)}
+                                className={`px-3 py-2 rounded ${
+                                    currentPage === index + 1
+                                        ? "bg-blue-500 text-white"
+                                        : "bg-gray-200 hover:bg-gray-300"
+                                }`}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Next Button */}
+                    <button
+                        onClick={goToNextPage}
+                        disabled={currentPage === totalPages}
+                        className={`px-4 py-2 rounded ${
+                            currentPage === totalPages
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-blue-500 text-white hover:bg-blue-600"
+                        }`}
+                    >
+                        Next
+                    </button>
                 </div>
-
-                {/* Next Button */}
-                <button
-                    onClick={goToNextPage}
-                    disabled={currentPage === totalPages}
-                    className={`px-4 py-2 rounded ${
-                        currentPage === totalPages
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
-                >
-                    Next
-                </button>
-            </div>
+            ) : (
+                <p>No Books found</p>
+            )}
         </div>
     );
 };
