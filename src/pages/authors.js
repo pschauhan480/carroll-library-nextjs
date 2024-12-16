@@ -8,8 +8,8 @@ import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
 const GET_AUTHORS = gql`
-    query Authors {
-        authors {
+    query Authors($id: ID) {
+        authors(id: $id) {
             id
             name
             biography
@@ -45,13 +45,14 @@ const UPDATE_AUTHOR = gql`
     }
 `;
 
-const fetchAuthors = async () => {
+export const fetchAuthors = async (whereObj) => {
     let authors = [];
 
     const client = createApolloClient();
     try {
         let response = await client.query({
             query: GET_AUTHORS,
+            variables: whereObj,
         });
         if (
             response &&
